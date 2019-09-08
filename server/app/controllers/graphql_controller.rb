@@ -24,6 +24,7 @@ class GraphqlController < ApplicationController
         ensure_hash(JSON.parse(ambiguous_param))
       else
         {}
+      end
     when Hash, ActionController::Parameters
       ambiguous_param
     when nil
