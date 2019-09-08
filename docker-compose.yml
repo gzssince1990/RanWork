@@ -1,0 +1,17 @@
+version: '3.2'
+
+services:
+  db:
+    restart: always
+    image: postgres:10.6
+    ports:
+      - 5222:5432
+    volumes:
+      - ./tmp/db_data:/var/lib/postgresql/data
+  server:
+    build: ./server
+    ports:
+      - 1108:5000
+    volumes:
+      - ./server:/ranwork
+    tty: true

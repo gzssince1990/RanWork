@@ -1,0 +1,21 @@
+{
+  "name": "ranwork",
+  "version": "0.0.0",
+  "author": "vydiaz",
+  "scripts": {
+    "?docker-start": "Start docker services",
+    "docker-start": "docker-compose up -d",
+    "?docker-down": "Stop docker services",
+    "docker-down": "docker-compose down",
+    "?docker-build": "Build docker services",
+    "docker-build": "docker-compose build",
+    "?docker-exec": "Execute a command inside docker container",
+    "docker-exec": "docker-compose exec server sh -c",
+    "?docker-ssh": "Server docker container bash shell",
+    "docker-ssh": "docker-compose exec server sh -c bash",
+    "?server": "Web server by foreman",
+    "server": "yarn docker-exec \"foreman start\"",
+    "?console": "Web server console",
+    "console": "yarn docker-exec \"rails console\""
+  }
+}
