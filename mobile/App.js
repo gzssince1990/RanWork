@@ -10,8 +10,6 @@ import { Container, Header, Content, DatePicker, Tab, Tabs, Text, View } from 'n
 import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 
-const MIN_DATE = new Date(2015, 8, 17)
-const MAX_DATE = new Date(2019, 6, 8)
 const PLACE_HOLDER = "Select Date"
 
 const HomeScreen = () => {
@@ -23,8 +21,6 @@ const HomeScreen = () => {
 
       <DatePicker
         defaultDate={new Date()}
-        minimumDate={MIN_DATE}
-        maximumDate={MAX_DATE}
         locale={"en"}
         placeHolderText={PLACE_HOLDER}
         textStyle={{ color: "pink" }}
@@ -35,21 +31,19 @@ const HomeScreen = () => {
   );
 }
 
-class SettingsScreen extends React.Component {
-  render() {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Settings!</Text>
-      </View>
-    );
-  }
+const ReportsScreen = () => {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Reports!</Text>
+    </View>
+  );
 }
 
 export default createAppContainer(
   createBottomTabNavigator(
     {
       Home: { screen: HomeScreen },
-      Settings: { screen: SettingsScreen },
+      Reports: { screen: ReportsScreen },
     },
     {
       tabBarOptions: {
