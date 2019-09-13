@@ -12,7 +12,7 @@ module Mutations
         { :attendance => attendance, :errors => ["Record already exists!"] }
       else
         attendance = Attendance.create!(:work_date => work_date, :start_time => start_time)
-        { :attendance => attendance, :error => [] }
+        { :attendance => attendance, :errors => [] }
       end
     end
   end
