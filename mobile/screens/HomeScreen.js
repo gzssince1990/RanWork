@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react'
 import gql from 'graphql-tag'
-import { Content, DatePicker, Text, View, Button } from 'native-base'
+import { Content, Text, View, Button } from 'native-base'
+import DatePicker from 'react-native-datepicker'
 import { useMutation } from '@apollo/react-hooks'
 import moment from 'moment'
 import { printBlockString } from 'graphql/language/blockString'
@@ -71,6 +72,8 @@ export default HomeScreen = () => {
 
   }
 
+  const getCompleteDateTime = time => `${chosenDate.format('ll')} ${time}`
+
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Home!</Text>
@@ -78,13 +81,15 @@ export default HomeScreen = () => {
 
       {
         startTime ? (
-          <View>
+          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+            <Text>Started At:</Text>
             <DatePicker
-              formatChosenDate={ date => `Started at ${moment(date).format('LTS')}` }
-              placeHolderText={today.format('ll')}
-              textStyle={{ color: "pink", fontSize: 20 }}
-              placeHolderTextStyle={{ color: "pink", fontSize: 20 }}
-              onDateChange={setStartTime}
+              mode="time"
+              showIcon={false}
+              is24Hour={true}
+              format={'LTS'}
+              date={startTime}
+              onDateChange={ time => setStartTime(moment(getCompleteDateTime(time))) }
             />
           </View>
         ) : (
@@ -100,9 +105,17 @@ export default HomeScreen = () => {
       {
         endTime ? (
           <>
-            <Text>
-              { `Ended at ${endTime.format('LTS')}` }
-            </Text>
+            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <Text>Ended At</Text>
+              <DatePicker
+                mode="time"
+                showIcon={false}
+                is24Hour={true}
+                format={'LTS'}
+                date={endTime}
+                onDateChange={ time => setEndTime(moment(getCompleteDateTime(time))) }
+              />
+            </View>
             <Text>
               { `Total hours: ${totalHours}` }
             </Text>
