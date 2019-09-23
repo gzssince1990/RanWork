@@ -51,6 +51,8 @@ const UPDATE_END_WORK = gql`
   }
 `
 
+// TODO: split some code out, make your own custom hooks
+// TODO: implement the useMutation. And make this app really usable
 export default HomeScreen = () => {
   const [ createWork, { createLoading } ] = useMutation(CREATE_WORK)
   const [ updateStartWork, { updateStartLoading } ] = useMutation(UPDATE_START_WORK)
