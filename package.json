@@ -16,6 +16,8 @@
     "?server": "Web server by foreman",
     "server": "yarn docker-exec \"foreman start\"",
     "?console": "Web server console",
-    "console": "yarn docker-exec \"rails console\""
+    "console": "yarn docker-exec \"rails console\"",
+    "?ios": "start ios emulator",
+    "ios": "cd mobile && react-native run-ios"
   }
 }
