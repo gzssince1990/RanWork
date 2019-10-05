@@ -1,10 +1,11 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import gql from 'graphql-tag'
 import { Content, Text, View, Button } from 'native-base'
 import DatePicker from 'react-native-datepicker'
 import { useMutation } from '@apollo/react-hooks'
 import moment from 'moment'
-import { printBlockString } from 'graphql/language/blockString'
+import usePrevious from '../hooks/usePrevious'
+import { isNil } from 'lodash'
 
 const PLACE_HOLDER = "Select Date"
 const RICE_PER_HOUR = 9
@@ -54,9 +55,23 @@ const UPDATE_END_WORK = gql`
 // TODO: split some code out, make your own custom hooks
 // TODO: implement the useMutation. And make this app really usable
 export default HomeScreen = () => {
-  const [ createWork, { createLoading } ] = useMutation(CREATE_WORK)
-  const [ updateStartWork, { updateStartLoading } ] = useMutation(UPDATE_START_WORK)
-  const [ updateEndWork, { updateEndLoading } ] = useMutation(UPDATE_END_WORK)
+  const [ createWork, {
+    loading: createLoading,
+    error: createError,
+    data: createData,
+  } ] = useMutation(CREATE_WORK)
+
+  const [ updateStartWork, {
+    loading: updateStartLoading,
+    error: updateStartError,
+    data: updateStartData,
+  } ] = useMutation(UPDATE_START_WORK)
+
+  const [ updateEndWork, {
+    loading: updateEndLoading,
+    error: updateEndError,
+    data: updateEndData,
+  } ] = useMutation(UPDATE_END_WORK)
 
   const [ chosenDate, setChosenDate ] = useState(moment())
   const [ startTime, setStartTime ] = useState(null)
@@ -76,9 +91,54 @@ export default HomeScreen = () => {
 
   const getCompleteDateTime = time => `${chosenDate.format('ll')} ${time}`
 
+  const prevStartTime = usePrevious(startTime)
+
+  useEffect(() => {
+    if(isNil(startTime)) return
+
+    if(isNil(prevStartTime)) {
+      // create startTime
+      createWork({
+        variables: {
+          input: {
+            workDate: chosenDate.format('YYYY-MM-DD'),
+            startTime: startTime.format(),
+          }
+        }
+      })
+    } else {
+      // update startTime
+      updateStartWork({
+        variables: {
+          input: {
+            workDate: chosenDate.format('YYYY-MM-DD'),
+            startTime: startTime.format(),
+          }
+        }
+      })
+    }
+  }, [startTime])
+
+  useEffect(() => {
+    if(isNil(endTime)) return
+
+    // update endTime
+    updateEndWork({
+      variables: {
+        input: {
+          workDate: chosenDate.format('YYYY-MM-DD'),
+          endTime: endTime.format(),
+        }
+      }
+    })
+  }, [endTime])
+
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Home!</Text>
+      <Text style={{ color: 'red' }}>
+        { createError && createError.message || "" }
+      </Text>
       <Text style={{ color: 'pink', fontSize: 20 }}>{ today.format('ll') }</Text>
 
       {
